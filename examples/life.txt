@@ -1,0 +1,8 @@
+STATES = {WORK:\(,HOME,\{BED\}}
+ALPHABET = {take train,wake,sleep\, dream}
+INITIAL = {\{BED\},HOME}
+FINITE = {\{BED\}}
+(HOME) ++ "take train" -> (WORK:\()
+(WORK:\() ++ "take train" -> (HOME)
+(\{BED\}) ++ "wake" -> (HOME)
+(HOME) ++ "sleep\, dream" -> (\{BED\})

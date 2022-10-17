@@ -1,0 +1,9 @@
+STATES = {Locked,Unlocked}
+ALPHABET = {coin,push}
+INITIAL = {Locked}
+FINITE = {Locked,Unlocked}
+(Locked) ++ "coin" -> (Unlocked)
+(Locked) ++ "push" -> (Locked)
+(Locked) ++ "hit" -> (Locked)
+(Unlocked) ++ "coin" -> (Locked)
+(Unlocked) ++ "push" -> (Unlocked)

@@ -14,13 +14,13 @@ class FSM:
 
     def print(self):
         out = "Finite state machine consist:\n"
-        out += "states: " + ', '.join(self.states) + "\n"
-        out += "start: " + ', '.join(self.initial_state) + "\n"
-        out += "finite states: " + ', '.join(self.finite_states) + "\n"
-        out += "alphabet: " + ', '.join(self.input_alphabet) + "\n"
+        out += "States: " + '; '.join(self.states) + "\n"
+        out += "Start: " + self.initial_state + "\n"
+        out += "Finite states: " + '; '.join(self.finite_states) + "\n"
+        out += "Alphabet: " + '; '.join(self.input_alphabet) + "\n"
         out += "Rules: \n"
         for x in self.transition:
-            out += f"({x[0]})-{x[1]}->({self.transition[x]}), "
+            out += f"{x[0]}------{x[1]}------>{self.transition[x]}\n"
         return out
 
     def clear(self):
@@ -54,8 +54,10 @@ def p_alphabet(p):
 
 def p_start(p):
     'start : INITIAL ASSIGNMENT SET'
-    if len([state.replace('\,',',') for state in re.split(r'(?<!\\),', p[3]) ]) != 1:
+    s = [state.replace('\,',',') for state in re.split(r'(?<!\\),', p[3]) ]
+    if len(s) != 1:
         print ("invalid initial state: " + p[3])
+        fsm_global.initial_state = s[0]
     else:
         fsm_global.initial_state = p[3]
 

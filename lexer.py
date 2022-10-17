@@ -41,12 +41,12 @@ def t_error(t):
 
 def t_SYMBOL(t):
     r'"(([^\\]*?)|\\.)*?\"'
-    t.value = remove_slash(t.value[1:-1])
+    t.value = remove_slash(t.value[1:-1]).replace("\,", ",")
     return t
 
 def t_STATE(t):
     r'\((([^\\]*?)|\\.)*?\)'
-    t.value = remove_slash(t.value[1:-1])
+    t.value = remove_slash(t.value[1:-1]).replace("\,", ",")
     return t
 
 def t_SET(t):
