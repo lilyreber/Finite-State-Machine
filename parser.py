@@ -93,9 +93,9 @@ def read_fsm(file):
     wfile.write(fsm_global.print())
     return fsm_global
 
-
 def main():
     read_fsm(sys.argv[1])
+
 
 
 if __name__ == "__main__":
