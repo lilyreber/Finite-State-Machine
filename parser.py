@@ -32,7 +32,7 @@ class FSM:
 
 
 fsm_global = FSM()
-parser = yacc.yacc()
+
 
 def p_error(p):
     if p == None:
@@ -83,8 +83,9 @@ def p_transition(p):
     fsm_global.transition[(p[1], p[3])] = p[5]
 
 
-def read_fsm(file, parser):
+def read_fsm(file):
     fsm_global.clear()
+    parser = yacc.yacc()
     rfile = open(file)
     wfile = open(sys.argv[1] + ".out", 'w')
     for line in rfile.readlines():
@@ -94,7 +95,7 @@ def read_fsm(file, parser):
 
 
 def main():
-    read_fsm(sys.argv[1], parser)
+    read_fsm(sys.argv[1])
 
 
 if __name__ == "__main__":
