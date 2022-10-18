@@ -32,7 +32,7 @@ class FSM:
 
 
 fsm_global = FSM()
-
+parser = yacc.yacc()
 
 def p_error(p):
     if p == None:
@@ -94,7 +94,6 @@ def read_fsm(file, parser):
 
 
 def main():
-    parser = yacc.yacc()
     read_fsm(sys.argv[1], parser)
 
 
