@@ -1,6 +1,7 @@
 import ply.yacc as yacc
 import sys
 import re
+import copy
 
 from lexer import tokens
 
@@ -32,7 +33,6 @@ class FSM:
 
 
 fsm_global = FSM()
-
 
 def p_error(p):
     if p == None:
@@ -87,7 +87,7 @@ def read_fsm(file):
     fsm_global.clear()
     parser = yacc.yacc()
     rfile = open(file)
-    wfile = open(sys.argv[1] + ".out", 'w')
+    wfile = open(file + ".out", 'w')
     for line in rfile.readlines():
         parser.parse(line)
     wfile.write(fsm_global.print())
@@ -95,7 +95,6 @@ def read_fsm(file):
 
 def main():
     read_fsm(sys.argv[1])
-
 
 
 if __name__ == "__main__":
