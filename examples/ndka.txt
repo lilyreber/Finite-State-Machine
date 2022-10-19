@@ -1,0 +1,8 @@
+STATES = {a,b,c}
+ALPHABET = {1,2}
+INITIAL = {a}
+FINITE = {c}
+(a) ++ "1" -> (b)
+(a) ++ "2" -> (b)
+(a) ++ "1" -> (c)
+(b) ++ "2" -> (c)

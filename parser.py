@@ -21,7 +21,8 @@ class FSM:
         out += "Alphabet: " + '; '.join(self.input_alphabet) + "\n"
         out += "Rules: \n"
         for x in self.transition:
-            out += f"{x[0]}------{x[1]}------>{self.transition[x]}\n"
+            for y in self.transition[x]:
+                out += f"{x[0]}------{x[1]}------>{y}\n"
         return out
 
     def clear(self):
@@ -80,7 +81,10 @@ def p_transition(p):
         return print(p[3] + " is not in alphabet")
     if p[5] not in fsm_global.states:
         return print(p[5] + " is not state")
-    fsm_global.transition[(p[1], p[3])] = p[5]
+    if (p[1], p[3]) not in fsm_global.transition:
+        fsm_global.transition[(p[1], p[3])] = set()
+    fsm_global.transition[(p[1], p[3])].add(p[5])
+
 
 
 def read_fsm(file):
