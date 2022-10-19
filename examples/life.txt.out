@@ -1,10 +1,10 @@
 Finite state machine consist:
-States: WORK:(; HOME; {BED}
+States: HOME; WORK:(; {BED}
 Start: {BED}
 Finite states: {BED}
-Alphabet: take train; sleep, dream; wake
+Alphabet: sleep, dream; wake; take train
 Rules: 
-HOME------take train------>WORK:(
-WORK:(------take train------>HOME
-{BED}------wake------>HOME
-HOME------sleep, dream------>{BED}
+HOME------"take train"------>WORK:(
+WORK:(------"take train"------>HOME
+{BED}------"wake"------>HOME
+HOME------"sleep, dream"------>{BED}

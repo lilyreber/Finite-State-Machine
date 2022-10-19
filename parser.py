@@ -22,7 +22,7 @@ class FSM:
         out += "Rules: \n"
         for x in self.transition:
             for y in self.transition[x]:
-                out += f"{x[0]}------{x[1]}------>{y}\n"
+                out += f"{x[0]}------\"{x[1]}\"------>{y}\n"
         return out
 
     def clear(self):
@@ -77,7 +77,7 @@ def p_transition(p):
     'start : STATE BINDING SYMBOL TRANSITION STATE'
     if p[1] not in fsm_global.states:
         return print(p[1] + " is not state")
-    if p[3] not in fsm_global.input_alphabet:
+    if p[3] not in fsm_global.input_alphabet and p[3] != "":
         return print(p[3] + " is not in alphabet")
     if p[5] not in fsm_global.states:
         return print(p[5] + " is not state")

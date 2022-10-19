@@ -1,8 +1,8 @@
 Finite state machine consist:
-States: c; a; b
+States: c; b; a
 Start: a
-Finite states: c; a; b
+Finite states: c; b; a
 Alphabet: 2; 1
 Rules: 
-a------"1"------>b
+a------""------>b
 a------"2"------>a
