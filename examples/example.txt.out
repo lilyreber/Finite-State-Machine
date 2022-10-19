@@ -1,7 +1,7 @@
 Finite state machine consist:
-States: b; a; c
+States: a; c; b
 Start: a
-Finite states: b; a; c
+Finite states: a; c; b
 Alphabet: 1; 2
 Rules: 
 a------1------>b

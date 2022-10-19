@@ -1,8 +1,8 @@
 Finite state machine consist:
-States: Unlocked; Locked
+States: Locked; Unlocked
 Start: Locked
-Finite states: Unlocked; Locked
-Alphabet: push; coin
+Finite states: Locked; Unlocked
+Alphabet: coin; push
 Rules: 
 Locked------coin------>Unlocked
 Locked------push------>Locked
