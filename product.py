@@ -3,7 +3,6 @@ import sys
 import ply.yacc as yacc
 
 from parser1 import *
-from fsmfromism import *
 global dka1
 global dka2
 global wfile
