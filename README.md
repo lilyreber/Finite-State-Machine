@@ -24,3 +24,11 @@ Run from the console with the command `python3 product.py operation filename1 fi
 The operation may be "addition" "association" "difference" "intersection".
 ### Examples for product
 [Link](https://github.com/lilyreber/Finite-State-Machine/tree/main/examples_for_product)
+
+### Deter
+[Link](https://github.com/lilyreber/Finite-State-Machine/blob/main/product.py)
+Run from the console with the command `python3 product.py operation filename1 filename2.`
+The operation may be "addition" "association" "difference" "intersection".
+### Examples for product
+[Link](https://github.com/lilyreber/Finite-State-Machine/tree/main/examples_for_product)
+
