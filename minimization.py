@@ -1,7 +1,7 @@
 from collections import deque
-from parser import read_fsm
-from parser import FSM 
-from parser import fsm_global
+from parser_fsm import read_fsm
+from parser_fsm import FSM 
+from parser_fsm import fsm_global
 import copy
 import sys
 
