@@ -1,0 +1,10 @@
+Finite state machine consist:
+States: s1; t1
+Start: s1
+Finite states: t1
+Alphabet: 1; 0
+Rules: 
+s1------0------>s1
+s1------1------>t1
+t1------0------>t1
+t1------1------>t1
