@@ -1,11 +1,71 @@
+from ast import operator
 from collections import deque
+from os import rename
+from platform import mac_ver
 from parser_fsm import read_fsm
 from parser_fsm import FSM 
 from parser_fsm import fsm_global
 import copy
 import sys
+import re
 
 
+def make_good_names(machine):
+    class mydict:
+        d = dict()
+        i=0
+        def __getitem__(self, ky):
+            if ky not in self.d:
+                self.i+=1
+                self.d[ky] = str(self.i)
+            return self.d[ky]
+    renamer = mydict()
+
+    states = set()
+    for s in machine.states:
+        states.add(renamer[s])
+    machine.states = states
+
+    machine.initial_state = renamer[machine.initial_state]
+
+    finite_states = set()
+    for s in machine.finite_states:
+        finite_states.add(renamer[s])
+    machine.finite_states = finite_states
+
+    transition = dict()
+    for t in machine.transition.keys():
+        transition[(renamer[t[0]], t[1])] = set()
+        for p in machine.transition[t]:
+            (transition[(renamer[t[0]], t[1])]).add(renamer[p])
+    machine.transition = transition
+
+    return machine
+
+def print_fsm(machine):
+    s = ""
+    s+="STATES = "+str(machine.states).replace('\'', '').replace('\"', '').replace(' ', '')+"\n"
+    s+="ALPHABET = "+str(machine.input_alphabet).replace('\'', '').replace('\"', '').replace(' ', '')+"\n"
+    s+="INITIAL = {"+machine.initial_state+"}\n"
+    s+="FINITE = "+str(machine.finite_states).replace('\'', '').replace('\"', '').replace(' ', '')+"\n"
+    for x in machine.transition:
+            for y in machine.transition[x]:
+                s+=f"({x[0]}) ++ \"{x[1]}\" -> ({y})"+"\n"
+    return s
+
+'''
+def print_fsm(machine):
+    s = ""
+    s+="STATES = "+str(machine.states).replace('\'', '').replace('\"', '').replace(' ', '')+"\n"
+    s+="ALPHABET = "+str(machine.input_alphabet).replace('\'', '').replace('\"', '').replace(' ', '')+"\n"
+    s+="INITIAL = {"+machine.initial_state+"}\n"
+    s+="FINITE = "+str(machine.finite_states).replace('\'', '').replace('\"', '').replace(' ', '')+"\n"
+    for x in machine.transition:
+            for y in machine.transition[x]:
+                s+=f"({x[0]}) ++ \"{x[1]}\" -> ({y})"+"\n"
+    return s
+'''
+        
 def check_determinism(machine):
     for key in machine.keys():
         if len(set(machine[key])) >1:
@@ -13,6 +73,14 @@ def check_determinism(machine):
     return True
 
 def determine(inp):
+    ########## check that the automaton is already d
+    already_d = True
+    for v in inp.transition:
+        if len(inp.transition[v]) > 1:
+            already_d=False
+    if already_d:
+        return inp
+    ##########
     q = deque()
     oldq = deque()
     s = set()
@@ -54,13 +122,18 @@ def determine(inp):
             res.transition[(str(set(key[0])), key[1])] = set()
         (res.transition[(str(set(key[0])), key[1])]).add(s)
     res.input_alphabet = inp.input_alphabet
-    res.initial_state = str(set(inp.initial_state))
+    initstateset = set()
+    initstateset.add(str(inp.initial_state))
+    res.initial_state = str(initstateset)
+    res = make_good_names(res)
     return res
 
 
 def main():
     fsm1 = copy.deepcopy(read_fsm(sys.argv[1]))
+    #fsm1 = copy.deepcopy(read_fsm("example_for_determinization/example_from_hw03.txt"))
+    #wfile = open("example_for_determinization/example_from_hw03.txt"+ ".out", 'w')
     wfile = open(sys.argv[1] + ".out", 'w')
-    wfile.write(determine(fsm1).print())
+    wfile.write(print_fsm(determine(fsm1)))
 if __name__ == "__main__":
     main()

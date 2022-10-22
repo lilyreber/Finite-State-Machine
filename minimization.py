@@ -2,6 +2,8 @@ from collections import deque
 from parser_fsm import read_fsm
 from parser_fsm import FSM 
 from parser_fsm import fsm_global
+from determinization import print_fsm
+from determinization import make_good_names
 import copy
 import sys
 
@@ -80,14 +82,14 @@ def minimize(machine):
         if representative not in processed_vertexes:
             i+=1
             vertexes_by_class[i]=set()
-        for el in equivalent_vertexes[representative]:
-            processed_vertexes.add(el)
-            class_by_vertex[el] = i
-            vertexes_by_class[i].add(el)
+            for el in equivalent_vertexes[representative]:
+                processed_vertexes.add(el)
+                class_by_vertex[el] = i
+                vertexes_by_class[i].add(el)
     res = FSM()
     res.finite_states=set()
     res.initial_state=None
-    res.input_alphabet=set()
+    res.input_alphabet=machine.input_alphabet
     res.states=set()
     res.transition=dict()
     for c in range(1, i+1):
@@ -103,11 +105,11 @@ def minimize(machine):
     return res
 
 def main():
-    #fsm1 = copy.deepcopy(read_fsm("task2_example1.txt"))
+    #fsm1 = copy.deepcopy(read_fsm("examples_for_minimization/example_from_hw03d.txt"))
     fsm1 = copy.deepcopy(read_fsm(sys.argv[1]))
     wfile = open(sys.argv[1] + ".out", 'w')
-    #wfile = open("task2_example1.txt" + ".out", 'w')
-    wfile.write(minimize(make_full(fsm1)).print())
+    #wfile = open("examples_for_minimization/example_from_hw03d.txt" + ".out", 'w')
+    wfile.write(print_fsm(minimize(make_full(fsm1))))
 
 if __name__ == "__main__":
     main()
