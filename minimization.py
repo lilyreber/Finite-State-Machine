@@ -82,10 +82,10 @@ def minimize(machine):
         if representative not in processed_vertexes:
             i+=1
             vertexes_by_class[i]=set()
-        for el in equivalent_vertexes[representative]:
-            processed_vertexes.add(el)
-            class_by_vertex[el] = i
-            vertexes_by_class[i].add(el)
+            for el in equivalent_vertexes[representative]:
+                processed_vertexes.add(el)
+                class_by_vertex[el] = i
+                vertexes_by_class[i].add(el)
     res = FSM()
     res.finite_states=set()
     res.initial_state=None
@@ -105,10 +105,10 @@ def minimize(machine):
     return res
 
 def main():
-    #fsm1 = copy.deepcopy(read_fsm("examples_for_minimization/task2_example2.txt"))
+    #fsm1 = copy.deepcopy(read_fsm("examples_for_minimization/example_from_hw03d.txt"))
     fsm1 = copy.deepcopy(read_fsm(sys.argv[1]))
     wfile = open(sys.argv[1] + ".out", 'w')
-    #wfile = open("examples_for_minimization/task2_example2.txt" + ".out", 'w')
+    #wfile = open("examples_for_minimization/example_from_hw03d.txt" + ".out", 'w')
     wfile.write(print_fsm(minimize(make_full(fsm1))))
 
 if __name__ == "__main__":

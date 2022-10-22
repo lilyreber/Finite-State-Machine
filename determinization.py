@@ -42,8 +42,6 @@ def make_good_names(machine):
 
     return machine
 
-
-
 def print_fsm(machine):
     s = ""
     s+="STATES = "+str(machine.states).replace('\'', '').replace('\"', '').replace(' ', '')+"\n"
@@ -54,7 +52,19 @@ def print_fsm(machine):
             for y in machine.transition[x]:
                 s+=f"({x[0]}) ++ \"{x[1]}\" -> ({y})"+"\n"
     return s
-    
+
+'''
+def print_fsm(machine):
+    s = ""
+    s+="STATES = "+str(machine.states).replace('\'', '').replace('\"', '').replace(' ', '')+"\n"
+    s+="ALPHABET = "+str(machine.input_alphabet).replace('\'', '').replace('\"', '').replace(' ', '')+"\n"
+    s+="INITIAL = {"+machine.initial_state+"}\n"
+    s+="FINITE = "+str(machine.finite_states).replace('\'', '').replace('\"', '').replace(' ', '')+"\n"
+    for x in machine.transition:
+            for y in machine.transition[x]:
+                s+=f"({x[0]}) ++ \"{x[1]}\" -> ({y})"+"\n"
+    return s
+'''
         
 def check_determinism(machine):
     for key in machine.keys():
@@ -63,6 +73,14 @@ def check_determinism(machine):
     return True
 
 def determine(inp):
+    ########## check that the automaton is already d
+    already_d = True
+    for v in inp.transition:
+        if len(inp.transition[v]) > 1:
+            already_d=False
+    if already_d:
+        return inp
+    ##########
     q = deque()
     oldq = deque()
     s = set()
@@ -113,7 +131,8 @@ def determine(inp):
 
 def main():
     fsm1 = copy.deepcopy(read_fsm(sys.argv[1]))
-    #fsm1 = copy.deepcopy(read_fsm("example_for_determinization/bin.txt"))
+    #fsm1 = copy.deepcopy(read_fsm("example_for_determinization/example_from_hw03.txt"))
+    #wfile = open("example_for_determinization/example_from_hw03.txt"+ ".out", 'w')
     wfile = open(sys.argv[1] + ".out", 'w')
     wfile.write(print_fsm(determine(fsm1)))
 if __name__ == "__main__":
