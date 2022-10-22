@@ -35,13 +35,12 @@ class FSM:
         self.transition.clear()
 
     def print_as_fsm(self):
-        out = "STATES = {" + ','.join(add_slash(s) for s in self.states) + "}" + "\n"
-        out += "ALPHABET = {" + ','.join(add_slash(s) for s in self.input_alphabet) + "}" + "\n"
+        out = "STATES = {" + ','.join(add_slash(str(s)) for s in self.states) + "}" + "\n"
+        out += "ALPHABET = {" + ','.join(add_slash(str(s)) for s in self.input_alphabet) + "}" + "\n"
         out += "INITIAL = {" + add_slash(str(self.initial_state)) + "}" + "\n"
-        out += "FINITE = {" + ','.join(add_slash(s) for s in self.finite_states) + "}" + "\n"
+        out += "FINITE = {" + ','.join(add_slash(str(s)) for s in self.finite_states) + "}" + "\n"
         for x in self.transition:
-            for y in self.transition[x]:
-                out += f"({add_slash(str(x[0]))}) ++ \"{add_slash(str(x[1]))}\" -> ({add_slash(str(y))})\n"
+                out += f"({add_slash(str(x[0]))}) ++ \"{add_slash(str(x[1]))}\" -> ({add_slash(str(self.transition[x]))})\n"
         return out
 
 fsm_global = FSM()

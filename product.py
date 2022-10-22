@@ -3,9 +3,12 @@ import sys
 import ply.yacc as yacc
 
 from parser_fsm import *
+from minimization import *
 global dka1
 global dka2
 global wfile
+def add_slash(t):
+    return t.replace("\\", "\\\\").replace("(", "\(").replace(")", "\)").replace("{", "\{").replace("}", "\}").replace('"', '\"').replace('"', '\"')
 def alphabet_association():
     lang=set()
     for s1 in dka1.input_alphabet:
@@ -29,18 +32,10 @@ def reading_dka2():
     dka2.transition = copy.deepcopy(temp.transition)
     dka2.finite_states = copy.deepcopy(temp.finite_states)
 
-def printer(states, input_alphabet, initial_state, finite_state, transition):
+def printer(res):
 
-    out = "STATES ="+str(states)+"\n"
-    out+="ALPHABET ="+str(input_alphabet)+"\n"
-    out+="INITIAL = {"+str(initial_state)+"}"+"\n"
-    if len(finite_state)==0:
-        out+="FINITE = {}"+"\n"
-    else:
-        out+="FINITE = "+str(finite_state)+"\n"
-    for s in states:
-        for symb in input_alphabet:
-            out+="("+str(s)+")"+" ++ "+"\""+symb+"\""+" -> "+"("+str(transition[(s, symb)])+")"+"\n"
+    out = res.print_as_fsm()
+
     return out
 
 def product_of_states():
@@ -62,7 +57,9 @@ def transition():
             for symb in dka1.input_alphabet:
                 for temp1 in dka1.transition[(s1, symb)]:
                     for temp2 in dka2.transition[(s2, symb)]:
-                        transit[((s1, s2), symb)] = (temp1, temp2)
+                        temp_v=set()
+                        temp_v.add((temp1, temp2))
+                        transit[((s1, s2), symb)] = temp_v
     return transit
 
 
@@ -81,7 +78,15 @@ def intersection():
             finite_states.add((s1, s2))
     input_alphabet = alphabet_association()
     transition_new = transition()
-    wfile.write(printer(states, input_alphabet, initial_state, finite_states, transition_new))
+    res= FSM()
+
+    res.transition=transition_new
+    res.states=states
+    res.initial_state=initial_state
+    res.finite_states=finite_states
+    res.input_alphabet=input_alphabet
+    res = minimize(res)
+    wfile.write(printer(res))
 
 
 def association():
@@ -101,7 +106,15 @@ def association():
             finite_states.add((s1, s2))
     input_alphabet = alphabet_association()
     transition_new = transition()
-    wfile.write(printer(states, input_alphabet, initial_state, finite_states, transition_new))
+    res = FSM()
+
+    res.transition = transition_new
+    res.states = states
+    res.initial_state = initial_state
+    res.finite_states = finite_states
+    res.input_alphabet = input_alphabet
+    res = minimize(res)
+    wfile.write(printer(res))
 
 
 def difference():
@@ -122,7 +135,15 @@ def difference():
 
     input_alphabet = alphabet_association()
     transition_new = transition()
-    wfile.write(printer(states, input_alphabet, initial_state, finite_states, transition_new))
+    res = FSM()
+
+    res.transition = transition_new
+    res.states = states
+    res.initial_state = initial_state
+    res.finite_states = finite_states
+    res.input_alphabet = input_alphabet
+    res = minimize(res)
+    wfile.write(printer(res))
 
 
 def addition():
@@ -133,7 +154,15 @@ def addition():
     for s in dka1.states:
         if s not in dka1.finite_states:
             finite_states.add(s)
-    wfile.write(printer(dka1.states, dka1.input_alphabet, dka1.input_alphabet, finite_states, dka1.transition))
+    res = FSM()
+
+    res.transition = dka1.transition
+    res.states = dka1.states
+    res.initial_state = dka1.initial_state
+    res.finite_states = finite_states
+    res.input_alphabet = dka1.input_alphabet
+    res = minimize(res)
+    wfile.write(printer(res))
 
 
 
@@ -143,7 +172,7 @@ def main():
     global wfile
     dka1=FSM()
     dka2=FSM()
-    sys.argv += ["intersection", "ex2.txt", "ex2_2.txt"]
+
     operation = sys.argv[1]
     wfile = open(sys.argv[2] +"_"+sys.argv[1] + ".out", 'w')
     if operation == "intersection":
