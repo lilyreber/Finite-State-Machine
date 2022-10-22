@@ -5,6 +5,8 @@ import copy
 
 from lexer import tokens
 
+def add_slash(t):
+  return t.replace("\\", "\\\\").replace("(", "\(").replace(")", "\)").replace("{", "\{").replace("}", "\}").replace(',', '\,').replace('"', '\"')
 
 class FSM:
     states = set()
@@ -32,6 +34,15 @@ class FSM:
         self.finite_states.clear()
         self.transition.clear()
 
+    def print_as_fsm(self):
+        out = "STATES = {" + ','.join(add_slash(s) for s in self.states) + "}" + "\n"
+        out += "ALPHABET = {" + ','.join(add_slash(s) for s in self.input_alphabet) + "}" + "\n"
+        out += "INITIAL = {" + add_slash(str(self.initial_state)) + "}" + "\n"
+        out += "FINITE = {" + ','.join(add_slash(s) for s in self.finite_states) + "}" + "\n"
+        for x in self.transition:
+            for y in self.transition[x]:
+                out += f"({add_slash(str(x[0]))}) ++ \"{add_slash(str(x[1]))}\" -> ({add_slash(str(y))})\n"
+        return out
 
 fsm_global = FSM()
 
@@ -95,6 +106,7 @@ def read_fsm(file):
     for line in rfile.readlines():
         parser.parse(line)
     wfile.write(fsm_global.print())
+    #print(fsm_global.print_as_fsm())
     return fsm_global
 
 def main():
